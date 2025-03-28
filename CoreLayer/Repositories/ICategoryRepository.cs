@@ -9,7 +9,7 @@ namespace Core.Repositories
         Task<IEnumerable<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
         Task AddAsync(Category category);
-        void Update(Category category);
-        void Delete(Category category);
+        Task Update(Category category);  
+        Task Delete(Category category); 
     }
 }

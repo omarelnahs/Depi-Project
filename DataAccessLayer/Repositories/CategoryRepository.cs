@@ -10,37 +10,39 @@ namespace DataAccessLayer.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
-        private readonly DbSet<Category> _dbSet;
 
         public CategoryRepository(AppDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<Category>();
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _context.Categories.FindAsync(id);
         }
 
         public async Task AddAsync(Category category)
         {
-            await _dbSet.AddAsync(category);
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Category category)
+        public async Task Update(Category category)
         {
-            _dbSet.Update(category);
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Category category)
+        public async Task Delete(Category category)
         {
-            _dbSet.Remove(category);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
         }
+
     }
 }
