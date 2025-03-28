@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers
 {
@@ -33,16 +34,34 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Category category)
         {
-            if (category == null) return BadRequest();
+            if (category == null)
+                return BadRequest("Invalid category data.");
+
+            // Ensure timestamps are set
+            category.CreatedAt = DateTime.UtcNow;
+            category.UpdatedAt = null;
+            category.IsDeleted = false;
+
             await _categoryRepository.AddAsync(category);
+
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Category category)
+        public async Task<IActionResult> Update(int id, [FromBody] Category category)
         {
-            if (id != category.Id) return BadRequest();
-            _categoryRepository.Update(category);
+            if (category == null || id != category.Id)
+                return BadRequest("Invalid category data.");
+
+            var existingCategory = await _categoryRepository.GetByIdAsync(id);
+            if (existingCategory == null)
+                return NotFound();
+
+            // Update fields
+            existingCategory.Name = category.Name;
+
+            await _categoryRepository.Update(existingCategory); // Ensure we await this
+
             return NoContent();
         }
 
@@ -51,7 +70,7 @@ namespace WebApi.Controllers
         {
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null) return NotFound();
-            _categoryRepository.Delete(category);
+            await _categoryRepository.Delete(category);
             return NoContent();
         }
     }
