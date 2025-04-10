@@ -106,5 +106,6 @@ namespace MVC.Context
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        public DbSet<MVC.Models.CartItem> CartItem { get; set; } = default!;
     }
 }
