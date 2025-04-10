@@ -10,37 +10,71 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+        <nav class="sidebar bg-dark">
+            <div class="d-flex flex-column h-100">
+                <!-- Brand/Logo -->
+                <div class="sidebar-header p-3">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none">
+                        <span class="fs-4">Dashboard</span>
+                    </a>
+                </div>
+
+                <!-- Nav Items -->
+                <ul class="nav nav-pills flex-column mb-auto px-3">
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active text-white" : "text-white-50")">
+                            <i class="bi bi-house-fill me-2"></i>
+                            General
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Users" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active text-white" : "text-white-50")">
+                            <i class="bi bi-people me-2"></i>
+                            Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Products" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "active text-white" : "text-white-50")">
+                            <i class="bi bi-cart me-2"></i>
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Orders" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Orders" ? "active text-white" : "text-white-50")">
+                            <i class="bi bi-file-earmark me-2"></i>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Stores" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Stores" ? "active text-white" : "text-white-50")">
+                            <i class="bi bi-graph-up me-2"></i>
+                            Stores
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Bottom Section (optional) -->
+                <div class="dropdown border-top px-3 py-3">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://via.placeholder.com/30" alt="User" class="rounded-circle me-2" width="32" height="32">
+                        <strong>User Name</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="main-content">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

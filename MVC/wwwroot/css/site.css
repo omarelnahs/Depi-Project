@@ -18,5 +18,39 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    padding-left: 250px; /* Match this with sidebar width */
+}
+* {
+    box-sizing: border-box;
+}
+a {
+    text-decoration: none;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    z-index: 100;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Enable scrolling if content is too tall */
+}
+
+.main-content {
+    padding: 20px;
+    width:100%
+
+}
+
+/* Optional: Style for active nav item */
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 500;
+}
+
+/* Optional: Hover effect */
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
