@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MVC.Models;
-
-public partial class Product
+namespace MVC.Models
 {
-    public int Id { get; set; }
+    public class Product
+    {
+        public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
 
-    public decimal Price { get; set; }
+        public string Description { get; set; }
 
-    public int Stock { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
 
-    public int CategoryId { get; set; }
+        public int Stock { get; set; }
+        public string ImageUrl { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
-    public bool IsDeleted { get; set; }
-
-    public DateTime? UpdatedAt { get; set; }
-
-    public virtual Category Category { get; set; } = null!;
-    public int StoreId { get; set; }
-    public Store? Store { get; set; }
+        // Relationships
+        public List<Category> Categories { get; set; } = new List<Category>();
+        public int StoreId { get; set; }
+        public Store Store { get; set; }
+    }
 }

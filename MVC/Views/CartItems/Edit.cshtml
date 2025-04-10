@@ -1,4 +1,4 @@
-﻿@model MVC.Models.CartItem
+﻿@model CartItem
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,9 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
+                <label asp-for="CartId" class="control-label"></label>
+                <select asp-for="CartId" class="form-control" asp-items="ViewBag.CartId"></select>
+                <span asp-validation-for="CartId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label"></label>

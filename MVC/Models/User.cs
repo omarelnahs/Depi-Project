@@ -1,21 +1,23 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVC.Models;
 
-    public class User
-    {
-        public int Id { get; set; }
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; } = false;
+    // Relationships
+    public Cart Cart { get; set; }
 
-        // Navigation
-        public ICollection<Store>? Stores { get; set; }
-        public ICollection<Order>? Orders { get; set; }
+    // Other relationships
+    public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
 }
 
+   

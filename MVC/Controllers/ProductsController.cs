@@ -22,7 +22,7 @@ namespace MVC.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Products.Include(p => p.Category).Include(p => p.Store);
+            var appDbContext = _context.Products.Include(p => p.Store);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace MVC.Controllers
             }
 
             var product = await _context.Products
-                .Include(p => p.Category)
                 .Include(p => p.Store)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
@@ -49,7 +48,6 @@ namespace MVC.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             ViewData["StoreId"] = new SelectList(_context.Stores, "Id", "Name");
             return View();
         }
@@ -59,7 +57,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Stock,CategoryId,CreatedAt,IsDeleted,UpdatedAt,StoreId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Stock,ImageUrl,StoreId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +65,6 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             ViewData["StoreId"] = new SelectList(_context.Stores, "Id", "Name", product.StoreId);
             return View(product);
         }
@@ -85,7 +82,6 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             ViewData["StoreId"] = new SelectList(_context.Stores, "Id", "Name", product.StoreId);
             return View(product);
         }
@@ -95,7 +91,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Stock,CategoryId,CreatedAt,IsDeleted,UpdatedAt,StoreId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Stock,ImageUrl,StoreId")] Product product)
         {
             if (id != product.Id)
             {
@@ -122,7 +118,6 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             ViewData["StoreId"] = new SelectList(_context.Stores, "Id", "Name", product.StoreId);
             return View(product);
         }
@@ -136,7 +131,6 @@ namespace MVC.Controllers
             }
 
             var product = await _context.Products
-                .Include(p => p.Category)
                 .Include(p => p.Store)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)

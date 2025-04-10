@@ -49,7 +49,7 @@ namespace MVC.Controllers
         // GET: OrderItems/Create
         public IActionResult Create()
         {
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
+            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Id");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
             return View();
         }
@@ -59,7 +59,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId,Quantity,UnitPrice")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("Id,ProductId,Quantity,Price")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderItem.OrderId);
+            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Id", orderItem.Id);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
             return View(orderItem);
         }
@@ -85,7 +85,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderItem.OrderId);
+            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Id", orderItem.Id);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
             return View(orderItem);
         }
@@ -95,7 +95,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId,Quantity,UnitPrice")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,Quantity,Price")] OrderItem orderItem)
         {
             if (id != orderItem.Id)
             {
@@ -122,7 +122,7 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderItem.OrderId);
+            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Id", orderItem.Id);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
             return View(orderItem);
         }

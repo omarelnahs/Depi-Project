@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.Context;
-using MVC.Models;
 
 namespace MVC.Controllers
 {
@@ -22,7 +21,7 @@ namespace MVC.Controllers
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.CartItem.Include(c => c.Product).Include(c => c.User);
+            var appDbContext = _context.CartItems.Include(c => c.Product);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -34,9 +33,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItem
+            var cartItem = await _context.CartItems
                 .Include(c => c.Product)
-                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cartItem == null)
             {
@@ -50,7 +48,6 @@ namespace MVC.Controllers
         public IActionResult Create()
         {
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
@@ -59,7 +56,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ProductId,Quantity")] CartItem cartItem)
+        public async Task<IActionResult> Create([Bind("Id,CartId,ProductId,Quantity")] CartItem cartItem)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +65,6 @@ namespace MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cartItem.UserId);
             return View(cartItem);
         }
 
@@ -80,13 +76,12 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItem.FindAsync(id);
+            var cartItem = await _context.CartItems.FindAsync(id);
             if (cartItem == null)
             {
                 return NotFound();
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cartItem.UserId);
             return View(cartItem);
         }
 
@@ -95,7 +90,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProductId,Quantity")] CartItem cartItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CartId,ProductId,Quantity")] CartItem cartItem)
         {
             if (id != cartItem.Id)
             {
@@ -123,7 +118,6 @@ namespace MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cartItem.UserId);
             return View(cartItem);
         }
 
@@ -135,9 +129,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItem
+            var cartItem = await _context.CartItems
                 .Include(c => c.Product)
-                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cartItem == null)
             {
@@ -152,10 +145,10 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cartItem = await _context.CartItem.FindAsync(id);
+            var cartItem = await _context.CartItems.FindAsync(id);
             if (cartItem != null)
             {
-                _context.CartItem.Remove(cartItem);
+                _context.CartItems.Remove(cartItem);
             }
 
             await _context.SaveChangesAsync();
@@ -164,7 +157,7 @@ namespace MVC.Controllers
 
         private bool CartItemExists(int id)
         {
-            return _context.CartItem.Any(e => e.Id == id);
+            return _context.CartItems.Any(e => e.Id == id);
         }
     }
 }
