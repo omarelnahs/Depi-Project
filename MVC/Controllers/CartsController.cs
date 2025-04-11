@@ -48,7 +48,7 @@ namespace MVC.Controllers
         // GET: Carts/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", cart.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cart.UserId);
             return View(cart);
         }
 
@@ -82,7 +82,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", cart.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cart.UserId);
             return View(cart);
         }
 
@@ -118,7 +118,7 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", cart.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", cart.UserId);
             return View(cart);
         }
 

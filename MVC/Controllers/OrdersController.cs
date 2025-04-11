@@ -48,7 +48,7 @@ namespace MVC.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", order.UserId);
             return View(order);
         }
 
@@ -82,7 +82,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", order.UserId);
             return View(order);
         }
 
@@ -118,7 +118,7 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", order.UserId);
             return View(order);
         }
 

@@ -18,6 +18,7 @@ namespace MVC.Context
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,10 @@ namespace MVC.Context
                 .WithOne(c => c.User)
                 .HasForeignKey<Cart>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
             // Configure Category
             modelBuilder.Entity<Category>(entity =>
@@ -50,10 +55,21 @@ namespace MVC.Context
                     .WithMany(s => s.Products)
                     .HasForeignKey(p => p.StoreId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(p => p.Categories)
-                    .WithMany(c => c.Products);
             });
+
+            // Configure many-to-many between Product and Category using ProductCategory
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(pc => new { pc.ProductId, pc.CategoryId });
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductCategories)
+                .HasForeignKey(pc => pc.ProductId);
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Category)
+                .WithMany(c => c.ProductCategories)
+                .HasForeignKey(pc => pc.CategoryId);
 
             // Configure Store
             modelBuilder.Entity<Store>(entity =>
@@ -63,7 +79,6 @@ namespace MVC.Context
                     .IsRequired();
             });
 
-            
             // Configure Order
             modelBuilder.Entity<Order>(entity =>
             {
@@ -99,21 +114,13 @@ namespace MVC.Context
                 entity.HasOne(ci => ci.Cart)
                     .WithMany(c => c.Items)
                     .HasForeignKey(ci => ci.CartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull); // Changed to ClientSetNull
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(ci => ci.Product)
                     .WithMany()
                     .HasForeignKey(ci => ci.ProductId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
-            // Add this if you haven't configured the Cart-User relationship:
-            modelBuilder.Entity<Cart>()
-                 .HasMany(c => c.Items)
-                 .WithOne()
-                 .HasForeignKey(ci => ci.CartId)
-                 .OnDelete(DeleteBehavior.Cascade);
-
 
             base.OnModelCreating(modelBuilder);
         }

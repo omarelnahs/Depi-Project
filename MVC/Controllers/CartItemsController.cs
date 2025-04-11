@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.Context;
+using MVC.Models;
 
 namespace MVC.Controllers
 {
@@ -21,7 +22,7 @@ namespace MVC.Controllers
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.CartItems.Include(c => c.Product);
+            var appDbContext = _context.CartItems.Include(c => c.Cart).Include(c => c.Product);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -34,6 +35,7 @@ namespace MVC.Controllers
             }
 
             var cartItem = await _context.CartItems
+                .Include(c => c.Cart)
                 .Include(c => c.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cartItem == null)
@@ -47,6 +49,7 @@ namespace MVC.Controllers
         // GET: CartItems/Create
         public IActionResult Create()
         {
+            ViewData["CartId"] = new SelectList(_context.Carts, "Id", "Id");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
             return View();
         }
@@ -64,6 +67,7 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CartId"] = new SelectList(_context.Carts, "Id", "Id", cartItem.CartId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
             return View(cartItem);
         }
@@ -81,6 +85,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
+            ViewData["CartId"] = new SelectList(_context.Carts, "Id", "Id", cartItem.CartId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
             return View(cartItem);
         }
@@ -117,6 +122,7 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CartId"] = new SelectList(_context.Carts, "Id", "Id", cartItem.CartId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", cartItem.ProductId);
             return View(cartItem);
         }
@@ -130,6 +136,7 @@ namespace MVC.Controllers
             }
 
             var cartItem = await _context.CartItems
+                .Include(c => c.Cart)
                 .Include(c => c.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cartItem == null)

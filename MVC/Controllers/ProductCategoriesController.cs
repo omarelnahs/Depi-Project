@@ -10,23 +10,23 @@ using MVC.Models;
 
 namespace MVC.Controllers
 {
-    public class OrderItemsController : Controller
+    public class ProductCategoriesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public OrderItemsController(AppDbContext context)
+        public ProductCategoriesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: OrderItems
+        // GET: ProductCategories
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.OrderItems.Include(o => o.Order).Include(o => o.Product);
+            var appDbContext = _context.ProductCategories.Include(p => p.Category).Include(p => p.Product);
             return View(await appDbContext.ToListAsync());
         }
 
-        // GET: OrderItems/Details/5
+        // GET: ProductCategories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,45 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems
-                .Include(o => o.Order)
-                .Include(o => o.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (orderItem == null)
+            var productCategory = await _context.ProductCategories
+                .Include(p => p.Category)
+                .Include(p => p.Product)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (productCategory == null)
             {
                 return NotFound();
             }
 
-            return View(orderItem);
+            return View(productCategory);
         }
 
-        // GET: OrderItems/Create
+        // GET: ProductCategories/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Status");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
             return View();
         }
 
-        // POST: OrderItems/Create
+        // POST: ProductCategories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductId,Quantity,Price")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("ProductId,CategoryId")] ProductCategory productCategory)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orderItem);
+                _context.Add(productCategory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Status", orderItem.Id);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
-            return View(orderItem);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", productCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productCategory.ProductId);
+            return View(productCategory);
         }
 
-        // GET: OrderItems/Edit/5
+        // GET: ProductCategories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +80,24 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems.FindAsync(id);
-            if (orderItem == null)
+            var productCategory = await _context.ProductCategories.FindAsync(id);
+            if (productCategory == null)
             {
                 return NotFound();
             }
-            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Status", orderItem.Id);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
-            return View(orderItem);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", productCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productCategory.ProductId);
+            return View(productCategory);
         }
 
-        // POST: OrderItems/Edit/5
+        // POST: ProductCategories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,Quantity,Price")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId")] ProductCategory productCategory)
         {
-            if (id != orderItem.Id)
+            if (id != productCategory.ProductId)
             {
                 return NotFound();
             }
@@ -106,12 +106,12 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(orderItem);
+                    _context.Update(productCategory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderItemExists(orderItem.Id))
+                    if (!ProductCategoryExists(productCategory.ProductId))
                     {
                         return NotFound();
                     }
@@ -122,12 +122,12 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Orders, "Id", "Status", orderItem.Id);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderItem.ProductId);
-            return View(orderItem);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", productCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productCategory.ProductId);
+            return View(productCategory);
         }
 
-        // GET: OrderItems/Delete/5
+        // GET: ProductCategories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,36 +135,36 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems
-                .Include(o => o.Order)
-                .Include(o => o.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (orderItem == null)
+            var productCategory = await _context.ProductCategories
+                .Include(p => p.Category)
+                .Include(p => p.Product)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (productCategory == null)
             {
                 return NotFound();
             }
 
-            return View(orderItem);
+            return View(productCategory);
         }
 
-        // POST: OrderItems/Delete/5
+        // POST: ProductCategories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var orderItem = await _context.OrderItems.FindAsync(id);
-            if (orderItem != null)
+            var productCategory = await _context.ProductCategories.FindAsync(id);
+            if (productCategory != null)
             {
-                _context.OrderItems.Remove(orderItem);
+                _context.ProductCategories.Remove(productCategory);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderItemExists(int id)
+        private bool ProductCategoryExists(int id)
         {
-            return _context.OrderItems.Any(e => e.Id == id);
+            return _context.ProductCategories.Any(e => e.ProductId == id);
         }
     }
 }
