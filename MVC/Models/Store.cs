@@ -27,7 +27,8 @@ namespace MVC.Models
 
         // Relationships
         public int UserId { get; set; }  // Store owner
-        public required User User { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
         public List<Product> Products { get; set; } = new List<Product>();
     }
 

@@ -25,11 +25,12 @@ namespace MVC.Models
         [StringLength(255)]
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        [Required]
         public UserRole Role { get; set; } = UserRole.Customer;
 
         // Relationships
-        public Cart Cart { get; set; }
-        public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+        public Cart? Cart { get; set; }
+        public virtual ICollection<Order>? Orders { get; set; } = new HashSet<Order>();
     }
 }
 

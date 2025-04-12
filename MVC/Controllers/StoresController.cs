@@ -52,19 +52,27 @@ namespace MVC.Controllers
             return View();
         }
 
-        // POST: Stores/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Address,CreatedAt,IsActive,UserId")] Store store)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(store);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    store.CreatedAt = DateTime.UtcNow;
+                    _context.Add(store);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Log the error (you can use a logger instead of Console)
+                    Console.WriteLine($"Error creating store: {ex.Message}");
+                    ModelState.AddModelError("", "An error occurred while creating the store.");
+                }
             }
+
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", store.UserId);
             return View(store);
         }
@@ -86,9 +94,6 @@ namespace MVC.Controllers
             return View(store);
         }
 
-        // POST: Stores/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Address,CreatedAt,IsActive,UserId")] Store store)
@@ -104,6 +109,7 @@ namespace MVC.Controllers
                 {
                     _context.Update(store);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,8 +122,13 @@ namespace MVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error updating store: {ex.Message}");
+                    ModelState.AddModelError("", "An error occurred while updating the store.");
+                }
             }
+
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", store.UserId);
             return View(store);
         }
