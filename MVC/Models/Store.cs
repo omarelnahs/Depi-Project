@@ -25,11 +25,10 @@ namespace MVC.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;
 
-        // Relationships
-        public int UserId { get; set; }  // Store owner
+        public string UserId { get; set; } // The UserId should be string to match the ApplicationUser's Id type.
         [ForeignKey("UserId")]
-        public User? User { get; set; }
+        public ApplicationUser? User { get; set; }
+
         public List<Product> Products { get; set; } = new List<Product>();
     }
-
 }

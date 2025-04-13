@@ -8,15 +8,14 @@ namespace MVC.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int UserId { get; set; }
+
+        // Change UserId to string
+        public string UserId { get; set; }
+
         public decimal Total { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string Status { get; set; } = "Pending";
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Relationships
-        public required User User { get; set; }
-        public List<OrderItem> Items { get; set; } = new();
+        public ApplicationUser User { get; set; }
+        public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
     }
 }

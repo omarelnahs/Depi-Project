@@ -5,7 +5,7 @@
 namespace MVC.Migrations
 {
     /// <inheritdoc />
-    public partial class store : Migration
+    public partial class productCategory : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

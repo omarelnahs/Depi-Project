@@ -14,6 +14,7 @@ public class Category
     [StringLength(100)]
     public required string  Name { get; set; }
 
+
     // Relationships
     public List<ProductCategory> ProductCategories { get; set; } = new();
 }

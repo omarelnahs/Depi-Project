@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+
 }
 
 <h1>Create</h1>
@@ -10,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -37,10 +38,10 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
+            <!-- Categories (MultiSelect List) -->
             <div class="form-group">
-                <label asp-for="ProductCategories" class="control-label"></label>
-                <select asp-for="ProductCategories" class="form-control" asp-items="ViewBag.ProductCategories"></select>
-                <span asp-validation-for="ProductCategories" class="text-danger"></span>
+                <label>Categories</label>
+                <select asp-for="ProductCategories" asp-items="(MultiSelectList)ViewBag.Categories" name="selectedCategories" class="form-control"></select>
             </div>
 
             <div class="form-group">
@@ -50,9 +51,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="StoreId" class="control-label"></label>
-                <select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
-                <span asp-validation-for="StoreId" class="text-danger"></span>
+                <label>Store</label>
+                <input asp-for="StoreId" class="form-control" value="@ViewBag.StoreId" type="text" /> 
             </div>
 
             <div class="form-group mt-3">

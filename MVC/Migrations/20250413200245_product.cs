@@ -5,7 +5,7 @@
 namespace MVC.Migrations
 {
     /// <inheritdoc />
-    public partial class addUserTable : Migration
+    public partial class product : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

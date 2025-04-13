@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<MVC.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "CartItem";
 }
 
-<h1>Index</h1>
+<h1>CartItem</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table ">
+    <thead class="table-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)

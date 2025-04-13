@@ -29,6 +29,7 @@ namespace MVC.Models
         public List<ProductCategory> ProductCategories { get; set; } = new();
 
         public int StoreId { get; set; }
+        [ForeignKey("StoreId")]
         public required Store Store { get; set; }
     }
 }
